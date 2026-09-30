@@ -13,7 +13,7 @@ dotenv.config();
 
 const app = express();
 
-// Trust Vercel proxy
+// Trust Vercel's reverse proxy
 app.set('trust proxy', 1);
 // Connect to database
 connectDB();
@@ -29,12 +29,14 @@ app.use(
 
 app.use(cors());
 
-// Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
-});
+  max: 100,
 
+  validate: {
+    forwardedHeader: false
+  }
+});
 app.use(limiter);
 
 // Body parser
