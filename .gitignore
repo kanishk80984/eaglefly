@@ -1,0 +1,139 @@
+# ==========================================
+# EAGLE FLY
+# ONLY BACKEND IS UPLOADED TO GITHUB
+# ==========================================
+
+# Ignore everything by default
+*
+
+# ==========================================
+# ALLOW BACKEND ONLY
+# ==========================================
+
+!backend/
+!backend/**
+
+# Allow root .gitignore
+!.gitignore
+
+# Allow README if created
+!README.md
+
+
+# ==========================================
+# BACKEND - ENVIRONMENT / SECRETS
+# ==========================================
+
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+
+# ==========================================
+# NODE.JS DEPENDENCIES
+# ==========================================
+
+backend/node_modules/
+
+
+# ==========================================
+# LOG FILES
+# ==========================================
+
+backend/*.log
+backend/logs/
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/pnpm-debug.log*
+
+
+# ==========================================
+# BUILD FILES
+# ==========================================
+
+backend/dist/
+backend/build/
+
+
+# ==========================================
+# CACHE
+# ==========================================
+
+backend/.cache/
+backend/.eslintcache
+
+
+# ==========================================
+# TEST / COVERAGE
+# ==========================================
+
+backend/coverage/
+backend/.nyc_output/
+
+
+# ==========================================
+# TEMPORARY FILES
+# ==========================================
+
+backend/tmp/
+backend/temp/
+
+
+# ==========================================
+# UPLOADED FILES
+# ==========================================
+
+backend/uploads/
+
+
+# ==========================================
+# DATABASE FILES / BACKUPS
+# ==========================================
+
+backend/*.sql
+backend/*.sql.gz
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+backend/backups/
+backend/database-backup/
+
+
+# ==========================================
+# IDE FILES
+# ==========================================
+
+backend/.vscode/
+backend/.idea/
+
+
+# ==========================================
+# OS FILES
+# ==========================================
+
+backend/.DS_Store
+backend/Thumbs.db
+
+
+# ==========================================
+# RAILWAY
+# ==========================================
+
+backend/.railway/
+
+
+# ==========================================
+# CERTIFICATES / KEYS
+# ==========================================
+
+backend/*.pem
+backend/*.key
+backend/*.crt
+
+
+# ==========================================
+# SERVICE ACCOUNT / CREDENTIAL FILES
+# ==========================================
+
+backend/service-account*.json
+backend/*credentials*.json
