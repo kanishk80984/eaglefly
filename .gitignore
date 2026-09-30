@@ -137,3 +137,8 @@ backend/*.crt
 
 backend/service-account*.json
 backend/*credentials*.json
+
+
+
+!uploads/
+!uploads/**
