@@ -4,29 +4,39 @@ const dotenv = require('dotenv');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+
 const { connectDB } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
-// Load env vars
+// Load environment variables
 dotenv.config();
+
+const app = express();
 
 // Connect to database
 connectDB();
 
-const app = express();
+// Security middleware
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: 'cross-origin'
+    }
+  })
+);
 
-// Security middlewares
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
 app.use(cors());
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100
 });
+
 app.use(limiter);
+
+// Body parser
+app.use(express.json());
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
@@ -41,11 +51,13 @@ const driverRoutes = require('./routes/driverRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const adRoutes = require('./routes/adRoutes');
 
-// Body parser
-app.use(express.json());
+// Static uploads
+app.use(
+  '/uploads',
+  express.static(path.join(__dirname, '../../uploads'))
+);
 
-// Mount Routes
-app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/vehicle-types', vehicleRoutes);
@@ -58,25 +70,27 @@ app.use('/api/driver', driverRoutes);
 app.use('/api/support/tickets', ticketRoutes);
 app.use('/api/ads', adRoutes);
 
+// Health check
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'success', message: 'API is running' });
+  res.status(200).json({
+    status: 'success',
+    message: 'Eagle Fly API is running'
+  });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Eagle Fly Backend API is running'
+  });
 });
 
 // Error handling
 app.use(notFound);
 app.use(errorHandler);
 
-const http = require('http');
-const { initSocket } = require('./sockets/socketManager');
-
-const PORT = process.env.PORT || 5000;
-const server = http.createServer(app);
-
-// Initialize Socket.io
-initSocket(server);
-
-server.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
-
-module.exports = { app, server };
+// IMPORTANT:
+// Vercel requires the Express app itself to be exported.
+// Do not call server.listen() here.
+module.exports = app;
